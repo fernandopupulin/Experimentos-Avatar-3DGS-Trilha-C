@@ -1,7 +1,9 @@
 # Pesquisa Trilha C — Cabeças 3DGS animáveis
 
-**Responsável:** Fernando  
-**Questão central:** como vincular gaussianas 3D a um modelo de cabeça controlável, preservando identidade e detalhes visuais durante mudanças de pose e expressão?  
+**Responsável:** Fernando
+
+**Questões centrais:** (1) como vincular gaussianas 3D a um modelo de cabeça controlável, preservando identidade e detalhes visuais durante mudanças de pose e expressão? (2) uma fala gravada ou ao vivo pode dirigir lábios, mandíbula e expressões desse avatar com sincronia verossímil?
+
 **Estado:** revisão inicial e protocolo experimental; resultados de implementação ainda não medidos.
 
 ## 1. Resumo executivo
@@ -81,7 +83,36 @@ Tabela de resultados a preencher **após executar** o protocolo:
 | C | — | — | — | — | — | — | Não medido |
 | D | — | — | — | — | — | — | Não medido |
 
-## 6. Plano de execução no GitHub
+## 6. Pergunta fundamental: fala pode animar a cabeça 3DGS?
+
+**Pergunta de pesquisa:** uma gravação, voz sintetizada ou fala captada pelo microfone pode mover lábios e mandíbula de um avatar 3DGS em sincronia com os fonemas, mantendo identidade, estabilidade temporal e aparência plausível? **Sim, é tecnicamente possível**, mas 3DGS é a representação/renderização da cabeça: sozinho, não interpreta áudio. É necessário um módulo que converta a fala em parâmetros de expressão ou que deforme diretamente as gaussianas. A qualidade em português brasileiro e em uma pessoa específica precisa ser demonstrada, não presumida a partir de vídeos dos artigos.
+
+### Duas arquiteturas possíveis
+
+**A. Áudio → controles faciais → malha → gaussianas ancoradas.** A fala alimenta um modelo de animação facial, que emite séries temporais de abertura da mandíbula, movimentos dos lábios e expressões. Esses controles são convertidos para FLAME/3DMM ou blendshapes do avatar. A malha deformada transporta as gaussianas. É o caminho mais útil para **estudar a pergunta central desta trilha**, pois permite observar e medir a ancoragem separadamente do gerador de movimento. [Audio2Face-3D](https://github.com/NVIDIA/Audio2Face-3D-SDK) fornece uma opção de áudio para animação facial, mas seus pesos de blendshape precisam de **retargeting/calibração** para o rig específico; a conexão com FLAME não é automática. [GaussianAvatars](https://github.com/ShenhanQian/GaussianAvatars) é o primeiro candidato a receptor por já expor controle por pose/expressão em uma malha facial. [FlashAvatar](https://arxiv.org/abs/2312.02214) e [GeoAvatar](https://arxiv.org/abs/2507.18155) são alternativas de avatar controlável, sujeitas à verificação do código e da interface de animação.
+
+**B. Áudio → deformação 3DGS aprendida → vídeo.** Um sistema de cabeça falante aprende diretamente a relação entre características acústicas e movimento/aparência. [GaussianTalker](https://github.com/cvlab-kaist/GaussianTalker) publica código e uma rota para inferência com áudio personalizado (`.wav` e características `.npy`); é um candidato objetivo para a **primeira demonstração de fala**. [TalkingGaussian](https://github.com/Fictionarry/TalkingGaussian) também publica código, separa componentes de face/boca e oferece características HuBERT indicadas pelos autores para áudio não inglês. [GaussianHeadTalk](https://github.com/madhav1ag/GaussianHeadTalk) merece avaliação adicional por focar estabilidade temporal. Esses sistemas não substituem automaticamente o experimento de ancoragem A–D: podem usar outra representação, outro conjunto de dados e outro processo de treinamento.
+
+| Opção | Melhor uso neste projeto | Condição ou dificuldade principal | Estado desta pesquisa |
+| --- | --- | --- | --- |
+| GaussianAvatars + gerador áudio→expressão | Integrar fala à malha controlável e medir o efeito do rigging. | Mapear controles gerados para FLAME; calibrar boca, dentes e latência. | Integração proposta; não executada. |
+| GaussianTalker | Produzir primeiro vídeo 3DGS dirigido por fala com código oficial. | Preparar vídeo do falante, treinamento e características do áudio personalizado. | Candidato a piloto; não executado. |
+| TalkingGaussian | Comparar face/boca e experimentar fala em português. | Pré-processamento, dependências antigas e custo de dados/memória; HuBERT não garante, por si, boa sincronização em português. | Candidato comparativo; não executado. |
+| GaussianSpeech | Referência de pesquisa que combina gaussianas ligadas a FLAME e um transformer condicionado por áudio. | O [repositório oficial](https://github.com/shivangi-aneja/GaussianSpeech) ainda informa que código e dados estão por vir; verificar novamente antes de planejar reprodução. | Referência conceitual. |
+
+Os nove trabalhos da Seção 3 investigam principalmente **reconstrução, rigging ou controle por expressão/pose**. Não se deve anunciar que aceitam um arquivo de áudio diretamente sem uma interface demonstrada. O mapa áudio→controle é uma camada adicional; para métodos como Avat3r, FiCA, OMEGA-Avatar e HeadsUp, a compatibilidade concreta depende do formato de controle disponível e de um adaptador treinado ou calibrado.
+
+### Experimento de áudio proposto
+
+1. Usar **a mesma identidade e o mesmo áudio** em cada pipeline comparável. Gravar um teste curto em português brasileiro com vogais, consoantes bilabiais (/p/, /b/, /m/), sorrisos durante a fala e pausas; guardar o WAV original e sua autorização de uso.
+2. Gerar controles por quadro (por exemplo, abertura de mandíbula e pesos labiais) e salvar sua linha do tempo. Na alternativa modular, registrar também os parâmetros FLAME após retargeting. Conferir alinhamento de frequência de amostragem, FPS e timestamps antes de renderizar.
+3. Renderizar vídeo com o áudio sincronizado. Inspecionar aproximação e fechamento dos lábios nas bilabiais, lábios em repouso nas pausas, dentes/interior da boca, movimento da mandíbula, preservação da identidade e ausência de tremor.
+4. Medir deslocamento áudio–vídeo, erro de marcos da boca quando houver referência alinhada, estabilidade temporal, FPS e latência **do pipeline inteiro** (captura/extração de áudio, modelo de movimento, deformação e renderização). Complementar com avaliação humana cega de sincronia e naturalidade; uma métrica automática isolada não comprova verossimilhança.
+5. Publicar `audio_teste.wav`, vídeo comparativo, parâmetros por quadro, configuração e métricas **somente se os direitos de uso permitirem**. Caso contrário, publicar código, protocolo e resultados agregados sem a mídia pessoal.
+
+**Critério de escolha inicial:** para responder *como prender gaussianas*, priorizar a arquitetura A com GaussianAvatars; para mostrar rapidamente que uma cabeça 3DGS pode falar a partir de WAV, testar GaussianTalker; para comparar tratamento de boca e um extrator indicado para áudio não inglês, testar TalkingGaussian. “Melhor” aqui significa **mais adequado ao objetivo e mais reproduzível**, não vencedor de qualidade, pois ainda não há ensaio local comum.
+
+## 7. Plano de execução no GitHub
 
 1. **Revisão e viabilidade:** registrar paper, código oficial, pesos, dados, licença, hardware e dependências de cada método. Selecionar um baseline reproduzível, preferencialmente GaussianAvatars, após verificar requisitos de FLAME e do conjunto de dados.
 2. **Captura e pré-processamento:** preparar vídeo/imagens, calibração e ajuste facial; salvar divisão treino/teste e parâmetros de câmera. Não versionar mídia pessoal sem permissão.
@@ -99,7 +130,7 @@ implementacoes/                   código próprio e configurações
 resultados/                       tabelas, figuras e vídeos autorizados
 ``` 
 
-## 7. Critério para recomendação final
+## 8. Critério para recomendação final
 
 Recomendar uma abordagem somente depois de medir, no mesmo cenário, fidelidade da expressão, estabilidade temporal e custo. Se a captura for monocular, a prioridade é robustez em vistas não observadas; se houver múltiplas câmeras, a prioridade pode passar a ser fidelidade e latência. Qualquer número de FPS precisa dizer se inclui rastreamento, deformação e renderização.
 
@@ -114,4 +145,10 @@ Recomendar uma abordagem somente depois de medir, no mesmo cenário, fidelidade 
 - [OMEGA-Avatar — artigo e página do projeto](https://arxiv.org/abs/2602.11693) · [Projeto](https://omega-avatar.github.io/OMEGA-Avatar/)
 - [FiCA — artigo e página do projeto](https://arxiv.org/abs/2606.24232) · [Projeto](https://youwangk.github.io/FiCA)
 - [HeadsUp — artigo e página do projeto](https://arxiv.org/abs/2605.04035) · [Projeto](https://apple.github.io/ml-headsup/)
+- [GaussianTalker — artigo e código oficial](https://arxiv.org/abs/2404.16012) · [GitHub](https://github.com/cvlab-kaist/GaussianTalker)
+- [TalkingGaussian — artigo e código oficial](https://arxiv.org/abs/2404.15264) · [GitHub](https://github.com/Fictionarry/TalkingGaussian)
+- [GaussianSpeech — artigo e página do projeto](https://arxiv.org/abs/2411.18675) · [Projeto](https://shivangi-aneja.github.io/projects/gaussianspeech/index.html)
+- [GaussianHeadTalk — artigo e código](https://arxiv.org/abs/2512.10939) · [GitHub](https://github.com/madhav1ag/GaussianHeadTalk)
+- [NVIDIA Audio2Face-3D — artigo e SDK oficial](https://arxiv.org/abs/2508.16401) · [GitHub](https://github.com/NVIDIA/Audio2Face-3D-SDK)
+
 
