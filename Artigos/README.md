@@ -57,7 +57,7 @@ Cada ficha separa **o que os autores descrevem** de **como poderíamos usar o m�
 - **O que faz:** infere um avatar gaussiano animável a partir de poucas imagens. Usa pistas visuais de DUSt3R e Sapiens e condiciona a animação em um código de expressão por atenção cruzada.
 - **Diferença técnica:** desloca o custo de otimização por pessoa para o treinamento de um modelo geral. Seu foco é reconstrução com poucas vistas, inclusive imagens de expressões inconsistentes.
 - **Aplicação na Trilha C (proposta):** estudar uma captura por celular ou poucas fotos quando não existe vídeo longo para otimização por pessoa.
-- **Fala:** a interface descrita é um código de expressão, não o áudio. Integrar fala exigiria um preditor áudio→código de expressão e avaliação da dinâmica temporal; um mapeamento para FLAME não deve ser presumido.
+- **Fala:** a interface descrita é um código de expressão, não o áudio. Segundo a página do projeto, esse código pode ser, por exemplo, uma descrição de expressão FLAME. Integrar fala ainda exigiria um preditor áudio→código de expressão e avaliação da dinâmica temporal.
 - **Limite prático:** comparar a qualidade com métodos treinados por pessoa requer declarar a diferença de dados e tempo de preparação. Em 16 de outubro de 2026, a [página oficial](https://tobias-kirschstein.github.io/avat3r/) ainda apresenta o código como “coming soon”; uma reprodução independente depende de sua liberação.
 
 ## 5. GeoAvatar
@@ -125,10 +125,12 @@ Estes dados descrevem **experimentos e condições dos respectivos autores**. N�
 | HeadsUp | Treinamento em conjunto interno de mais de 10 mil pessoas. | É escala do conjunto de treinamento relatado, não quantidade de pessoas testadas por nós nem garantia de acesso aos dados. | [Artigo](https://arxiv.org/abs/2605.04035) |
 | GaussianTalker (referência de fala) | Até 120 FPS de renderização, segundo os autores. | Número do artigo sobre cabeça falante; requer comparar também extração de áudio, driver e codificação do vídeo para latência total. | [Artigo](https://arxiv.org/abs/2404.16012) |
 
+### Recomendações provisórias
 
 - **Para estudar ancoragem:** começar pela interface explícita de [GaussianAvatars](https://github.com/ShenhanQian/GaussianAvatars), depois comparar a associação treinável de [SplattingAvatar](https://github.com/initialneil/SplattingAvatar) e o tratamento de boca de [GeoAvatar](https://arxiv.org/abs/2507.18155). É uma **ordem proposta de trabalho**, não um ranking de desempenho.
 - **Para captura limitada:** Avat3r, FiCA, OMEGA-Avatar e SpiD abordam aspectos diferentes da reconstrução com uma ou poucas imagens; escolher depende de expressão, cabeça completa, custo e disponibilidade de implementação.
 - **Para integração com fala:** testar primeiro a viabilidade de um controlador áudio→expressão em um rig conhecido e comparar com um sistema áudio→3DGS nativo. O [relatório principal](../relatorio_trilha_c.md#6-pergunta-fundamental-fala-pode-animar-a-cabeça-3dgs) detalha candidatos e critérios.
 - **Para afirmar “melhor”:** usar os mesmos dados, áudio, identidade, câmera e hardware. Sem esse ensaio, conclusões numéricas só podem ser atribuídas aos respectivos autores e às condições de seus artigos.
+
 
 
