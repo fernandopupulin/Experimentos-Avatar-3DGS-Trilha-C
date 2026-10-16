@@ -4,7 +4,7 @@ Pesquisa de Fernando sobre **cabeças 3D Gaussian Splatting (3DGS) animáveis**.
 
 ## Relatório
 
-Leia o [relatório da Trilha C](relatorio_trilha_c.md). Ele apresenta os nove trabalhos de referência, os gargalos técnicos, um protocolo de comparação e uma seção sobre integração com áudio. Compara um caminho modular (áudio → expressão facial → malha → gaussianas) com modelos 3DGS já dirigidos por fala.
+Leia o [relatório executivo em PDF](Implementacoes/relatorio_pesquisa_trilha_c.pdf) ou o [relatório detalhado da Trilha C](relatorio_trilha_c.md). Eles apresentam os nove trabalhos de referência, os gargalos técnicos, um protocolo de comparação e a integração com áudio. Comparam um caminho modular (áudio → expressão facial → malha → gaussianas) com modelos 3DGS já dirigidos por fala.
 
 As [fichas dos nove modelos](Artigos/README.md) detalham entrada, mecanismo, diferenças, aplicações propostas, interface possível com fala e limites de cada artigo, com links para fontes dos autores.
 

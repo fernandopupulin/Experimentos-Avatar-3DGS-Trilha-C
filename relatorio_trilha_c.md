@@ -6,6 +6,8 @@
 
 **Estado:** revisão inicial e protocolo experimental; resultados de implementação ainda não medidos.
 
+**Versão de leitura:** [relatório executivo em PDF](Implementacoes/relatorio_pesquisa_trilha_c.pdf). As fichas e o protocolo detalhado permanecem neste documento e em [Artigos/README.md](Artigos/README.md).
+
 ## 1. Resumo executivo
 
 Uma cabeça reconstruída com 3D Gaussian Splatting (3DGS) pode parecer convincente em uma pose e falhar ao sorrir, falar ou virar para o perfil. A dificuldade principal é definir **a correspondência entre cada gaussiana e a geometria deformável**. Uma solução prática é usar uma malha paramétrica, como FLAME, como estrutura de controle. Cada gaussiana recebe uma posição canônica ligada a um triângulo, ponto UV ou região da malha. Quando os parâmetros de pose e expressão mudam, a malha se deforma e as gaussianas acompanham a transformação. Região da boca, cabelo e áreas não observadas exigem tratamento adicional.
