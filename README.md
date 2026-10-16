@@ -6,6 +6,8 @@ Pesquisa de Fernando sobre **cabeças 3D Gaussian Splatting (3DGS) animáveis**.
 
 Leia o [relatório da Trilha C](relatorio_trilha_c.md). Ele apresenta os nove trabalhos de referência, os gargalos técnicos, um protocolo de comparação e uma seção sobre integração com áudio. Compara um caminho modular (áudio → expressão facial → malha → gaussianas) com modelos 3DGS já dirigidos por fala.
 
+As [fichas dos nove modelos](Artigos/README.md) detalham entrada, mecanismo, diferenças, aplicações propostas, interface possível com fala e limites de cada artigo, com links para fontes dos autores.
+
 **Estado atual:** revisão bibliográfica e plano experimental. Ainda não há resultados de implementação medidos neste repositório.
 
 ## Próximos passos
@@ -17,4 +19,5 @@ Leia o [relatório da Trilha C](relatorio_trilha_c.md). Ele apresenta os nove tr
 5. Testar o mesmo áudio em português brasileiro com um avatar controlável e um baseline de cabeça falante, registrando sincronia, naturalidade e latência total.
 
 Relatório inspirado na estrutura de [Experimentos Avatar 01 — Humans](https://github.com/CleiverJr/Experimentos-Avatar-01-Humans), de Cleiver Junior.
+
 
