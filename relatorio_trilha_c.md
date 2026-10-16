@@ -37,6 +37,8 @@ O vínculo puramente rígido tende a ser insuficiente para lábios, bochechas e 
 | [FiCA](https://arxiv.org/abs/2606.24232) | Uma imagem; malha gerada/refinada e gaussianas decodificadas para expressões novas. | Analisar o caminho de captura rápida sem otimização por pessoa. |
 | [HeadsUp](https://arxiv.org/abs/2605.04035) | Captura multivista; gaussianas parametrizadas em UV e ancoradas a uma cabeça neutra; animação por blendshapes. | Referência para qualidade com múltiplas câmeras e controle por blendshapes. |
 
+As descrições, diferenças, aplicações propostas e interfaces de fala de cada trabalho estão nas [fichas críticas dos nove modelos](Artigos/README.md). As fichas distinguem afirmações dos autores, inferências para esta pesquisa e resultados ainda não medidos.
+
 **Comparabilidade:** esses trabalhos usam entradas, dados de treino e, por vezes, objetivos distintos. Uma métrica publicada em um artigo não deve ser copiada como se fosse resultado de um teste local. Avat3r, FiCA, OMEGA-Avatar, SpiD e HeadsUp dependem de modelos previamente treinados; só entram em comparação quantitativa direta se houver acesso legítimo aos pesos, dados e pipeline completo.
 
 ## 4. Quatro gargalos a investigar
@@ -87,6 +89,8 @@ Tabela de resultados a preencher **após executar** o protocolo:
 
 **Pergunta de pesquisa:** uma gravação, voz sintetizada ou fala captada pelo microfone pode mover lábios e mandíbula de um avatar 3DGS em sincronia com os fonemas, mantendo identidade, estabilidade temporal e aparência plausível? **Sim, é tecnicamente possível**, mas 3DGS é a representação/renderização da cabeça: sozinho, não interpreta áudio. É necessário um módulo que converta a fala em parâmetros de expressão ou que deforme diretamente as gaussianas. A qualidade em português brasileiro e em uma pessoa específica precisa ser demonstrada, não presumida a partir de vídeos dos artigos.
 
+Para uma ferramenta de síntese de voz, a integração começa com o áudio efetivamente produzido (WAV ou fluxo de amostras), seguido do gerador de movimento e do renderizador. Se também houver texto, a transcrição e o tempo dos fonemas podem ajudar no alinhamento, mas o texto sozinho não reproduz prosódia e pausas do áudio final. Para microfone ou fala em tempo real, a mesma arquitetura precisa operar em blocos com atraso limitado; uma demonstração com arquivo inteiro não comprova latência interativa.
+
 ### Duas arquiteturas possíveis
 
 **A. Áudio → controles faciais → malha → gaussianas ancoradas.** A fala alimenta um modelo de animação facial, que emite séries temporais de abertura da mandíbula, movimentos dos lábios e expressões. Esses controles são convertidos para FLAME/3DMM ou blendshapes do avatar. A malha deformada transporta as gaussianas. É o caminho mais útil para **estudar a pergunta central desta trilha**, pois permite observar e medir a ancoragem separadamente do gerador de movimento. [Audio2Face-3D](https://github.com/NVIDIA/Audio2Face-3D-SDK) fornece uma opção de áudio para animação facial, mas seus pesos de blendshape precisam de **retargeting/calibração** para o rig específico; a conexão com FLAME não é automática. [GaussianAvatars](https://github.com/ShenhanQian/GaussianAvatars) é o primeiro candidato a receptor por já expor controle por pose/expressão em uma malha facial. [FlashAvatar](https://arxiv.org/abs/2312.02214) e [GeoAvatar](https://arxiv.org/abs/2507.18155) são alternativas de avatar controlável, sujeitas à verificação do código e da interface de animação.
@@ -101,6 +105,10 @@ Tabela de resultados a preencher **após executar** o protocolo:
 | GaussianSpeech | Referência de pesquisa que combina gaussianas ligadas a FLAME e um transformer condicionado por áudio. | O [repositório oficial](https://github.com/shivangi-aneja/GaussianSpeech) ainda informa que código e dados estão por vir; verificar novamente antes de planejar reprodução. | Referência conceitual. |
 
 Os nove trabalhos da Seção 3 investigam principalmente **reconstrução, rigging ou controle por expressão/pose**. Não se deve anunciar que aceitam um arquivo de áudio diretamente sem uma interface demonstrada. O mapa áudio→controle é uma camada adicional; para métodos como Avat3r, FiCA, OMEGA-Avatar e HeadsUp, a compatibilidade concreta depende do formato de controle disponível e de um adaptador treinado ou calibrado.
+
+### O que torna a fala verossímil
+
+Abertura da boca proporcional ao volume é apenas um baseline fraco. O teste deve verificar formato dos lábios para cada som, **coarticulação** entre sons consecutivos, contato labial em /p/, /b/ e /m/, pausas, movimento de mandíbula, dentes e interior da boca, continuidade entre quadros e ausência de deformação da identidade. Movimento emocional e da cabeça pode melhorar naturalidade, mas deve ser avaliado separadamente da sincronia labial. Essas são **exigências do protocolo desta pesquisa**, não resultados já obtidos.
 
 ### Experimento de áudio proposto
 
@@ -150,5 +158,6 @@ Recomendar uma abordagem somente depois de medir, no mesmo cenário, fidelidade 
 - [GaussianSpeech — artigo e página do projeto](https://arxiv.org/abs/2411.18675) · [Projeto](https://shivangi-aneja.github.io/projects/gaussianspeech/index.html)
 - [GaussianHeadTalk — artigo e código](https://arxiv.org/abs/2512.10939) · [GitHub](https://github.com/madhav1ag/GaussianHeadTalk)
 - [NVIDIA Audio2Face-3D — artigo e SDK oficial](https://arxiv.org/abs/2508.16401) · [GitHub](https://github.com/NVIDIA/Audio2Face-3D-SDK)
+
 
 
