@@ -58,7 +58,7 @@ Cada ficha separa **o que os autores descrevem** de **como poderíamos usar o m�
 - **Diferença técnica:** desloca o custo de otimização por pessoa para o treinamento de um modelo geral. Seu foco é reconstrução com poucas vistas, inclusive imagens de expressões inconsistentes.
 - **Aplicação na Trilha C (proposta):** estudar uma captura por celular ou poucas fotos quando não existe vídeo longo para otimização por pessoa.
 - **Fala:** a interface descrita é um código de expressão, não o áudio. Integrar fala exigiria um preditor áudio→código de expressão e avaliação da dinâmica temporal; um mapeamento para FLAME não deve ser presumido.
-- **Limite prático:** comparar a qualidade com métodos treinados por pessoa requer declarar a diferença de dados e tempo de preparação.
+- **Limite prático:** comparar a qualidade com métodos treinados por pessoa requer declarar a diferença de dados e tempo de preparação. Em 16 de outubro de 2026, a [página oficial](https://tobias-kirschstein.github.io/avat3r/) ainda apresenta o código como “coming soon”; uma reprodução independente depende de sua liberação.
 
 ## 5. GeoAvatar
 
@@ -112,8 +112,23 @@ Cada ficha separa **o que os autores descrevem** de **como poderíamos usar o m�
 
 ## Síntese para decisão
 
+### Números verificáveis publicados pelos autores
+
+Estes dados descrevem **experimentos e condições dos respectivos autores**. Não foram medidos neste repositório e não devem ser postos na mesma coluna de um benchmark local.
+
+| Trabalho | Dado publicado | Condição ou interpretação | Fonte |
+| --- | --- | --- | --- |
+| SplattingAvatar | Mais de 300 FPS em GPU moderna; 30 FPS em dispositivo móvel. | A página apresenta ambas as velocidades para a representação proposta, que inclui avatares de corpo e cabeça; não equivale à latência de áudio→vídeo. | [Artigo/projeto](https://initialneil.github.io/SplattingAvatar) |
+| FlashAvatar | Mais de 300 FPS. | Renderização a 512 × 512 em NVIDIA RTX 3090, segundo a página do projeto; o custo de um controlador por áudio fica fora dessa medida. | [Projeto](https://ustc3dv.github.io/FlashAvatar/) |
+| Avat3r | Quatro imagens de entrada; aproximadamente 8 FPS para animação do modelo de quatro vistas com ativação em cache. | Página do projeto: GPU RTX 3090. A geração inicial e a animação são etapas distintas. | [Projeto](https://tobias-kirschstein.github.io/avat3r/) |
+| FiCA | Criação de avatar em até 5 segundos, conforme os autores. | Uma foto como entrada; a página afirma animação em tempo real sob expressões-alvo, sem especificar aqui um benchmark de áudio. | [Projeto](https://youwangk.github.io/FiCA) |
+| HeadsUp | Treinamento em conjunto interno de mais de 10 mil pessoas. | É escala do conjunto de treinamento relatado, não quantidade de pessoas testadas por nós nem garantia de acesso aos dados. | [Artigo](https://arxiv.org/abs/2605.04035) |
+| GaussianTalker (referência de fala) | Até 120 FPS de renderização, segundo os autores. | Número do artigo sobre cabeça falante; requer comparar também extração de áudio, driver e codificação do vídeo para latência total. | [Artigo](https://arxiv.org/abs/2404.16012) |
+
+
 - **Para estudar ancoragem:** começar pela interface explícita de [GaussianAvatars](https://github.com/ShenhanQian/GaussianAvatars), depois comparar a associação treinável de [SplattingAvatar](https://github.com/initialneil/SplattingAvatar) e o tratamento de boca de [GeoAvatar](https://arxiv.org/abs/2507.18155). É uma **ordem proposta de trabalho**, não um ranking de desempenho.
 - **Para captura limitada:** Avat3r, FiCA, OMEGA-Avatar e SpiD abordam aspectos diferentes da reconstrução com uma ou poucas imagens; escolher depende de expressão, cabeça completa, custo e disponibilidade de implementação.
 - **Para integração com fala:** testar primeiro a viabilidade de um controlador áudio→expressão em um rig conhecido e comparar com um sistema áudio→3DGS nativo. O [relatório principal](../relatorio_trilha_c.md#6-pergunta-fundamental-fala-pode-animar-a-cabeça-3dgs) detalha candidatos e critérios.
 - **Para afirmar “melhor”:** usar os mesmos dados, áudio, identidade, câmera e hardware. Sem esse ensaio, conclusões numéricas só podem ser atribuídas aos respectivos autores e às condições de seus artigos.
+
 
