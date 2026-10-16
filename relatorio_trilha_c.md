@@ -37,7 +37,7 @@ O vínculo puramente rígido tende a ser insuficiente para lábios, bochechas e 
 | [FiCA](https://arxiv.org/abs/2606.24232) | Uma imagem; malha gerada/refinada e gaussianas decodificadas para expressões novas. | Analisar o caminho de captura rápida sem otimização por pessoa. |
 | [HeadsUp](https://arxiv.org/abs/2605.04035) | Captura multivista; gaussianas parametrizadas em UV e ancoradas a uma cabeça neutra; animação por blendshapes. | Referência para qualidade com múltiplas câmeras e controle por blendshapes. |
 
-As descrições, diferenças, aplicações propostas e interfaces de fala de cada trabalho estão nas [fichas críticas dos nove modelos](Artigos/README.md). As fichas distinguem afirmações dos autores, inferências para esta pesquisa e resultados ainda não medidos.
+As descrições, diferenças, aplicações propostas e interfaces de fala de cada trabalho estão nas [fichas críticas dos nove modelos](Artigos/README.md). Elas incluem uma tabela de **números publicados com suas condições** e distinguem afirmações dos autores, inferências para esta pesquisa e resultados ainda não medidos.
 
 **Comparabilidade:** esses trabalhos usam entradas, dados de treino e, por vezes, objetivos distintos. Uma métrica publicada em um artigo não deve ser copiada como se fosse resultado de um teste local. Avat3r, FiCA, OMEGA-Avatar, SpiD e HeadsUp dependem de modelos previamente treinados; só entram em comparação quantitativa direta se houver acesso legítimo aos pesos, dados e pipeline completo.
 
@@ -158,6 +158,7 @@ Recomendar uma abordagem somente depois de medir, no mesmo cenário, fidelidade 
 - [GaussianSpeech — artigo e página do projeto](https://arxiv.org/abs/2411.18675) · [Projeto](https://shivangi-aneja.github.io/projects/gaussianspeech/index.html)
 - [GaussianHeadTalk — artigo e código](https://arxiv.org/abs/2512.10939) · [GitHub](https://github.com/madhav1ag/GaussianHeadTalk)
 - [NVIDIA Audio2Face-3D — artigo e SDK oficial](https://arxiv.org/abs/2508.16401) · [GitHub](https://github.com/NVIDIA/Audio2Face-3D-SDK)
+
 
 
 
